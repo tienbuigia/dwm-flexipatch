@@ -19,6 +19,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+
+2022-05-06 - Added the tagpreview patch
+
 2022-02-11 - Added the isfreesize version of the sizehints patch and the [tagsync](https://github.com/bakkeby/dwm-flexipatch/pull/219) patch (contributed by [Bagelli](https://github.com/Bagellll))
 
 2021-11-23 - Added the taglabels and underlinetags patches
@@ -720,6 +723,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [tagothermonitor](https://dwm.suckless.org/patches/tagothermonitor/)
       - adds functions and keybindings to tag a window to a desired tag on an adjacent monitor
+
+   - [tagpreview](https://dwm.suckless.org/patches/tag-previews/)
+      - shows a preview of a tag when hovering the tag icon using the mouse
 
    - [tagswapmon](https://github.com/bakkeby/patches/wiki/tagswapmon/)
       - swap all visible windows on one monitor with those of an adjacent monitor
