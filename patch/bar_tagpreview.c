@@ -3,14 +3,15 @@
 void
 showtagpreview(int tag, int x, int y)
 {
-	if (selmon->tagmap[tag]) {
-		XSetWindowBackgroundPixmap(dpy, selmon->tagwin, selmon->tagmap[tag]);
-		XCopyArea(dpy, selmon->tagmap[tag], selmon->tagwin, drw->gc, 0, 0, selmon->mw / scalepreview, selmon->mh / scalepreview, 0, 0);
-		XMoveWindow(dpy, selmon->tagwin, x, y);
+	Monitor *m = selmon;
+	if (m->tagmap[tag]) {
+		XSetWindowBackgroundPixmap(dpy, m->tagwin, m->tagmap[tag]);
+		XCopyArea(dpy, m->tagmap[tag], m->tagwin, drw->gc, 0, 0, m->mw / scalepreview, m->mh / scalepreview, 0, 0);
+		XMoveWindow(dpy, m->tagwin, x, y);
 		XSync(dpy, False);
-		XMapWindow(dpy, selmon->tagwin);
+		XMapWindow(dpy, m->tagwin);
 	} else
-		XUnmapWindow(dpy, selmon->tagwin);
+		XUnmapWindow(dpy, m->tagwin);
 }
 
 void
@@ -25,16 +26,17 @@ tagpreviewswitchtag(void)
 {
 	int i;
 	unsigned int occ = 0;
+	Monitor *m = selmon;
 	Client *c;
 	Imlib_Image image;
 
-	for (c = selmon->clients; c; c = c->next)
+	for (c = m->clients; c; c = c->next)
 		occ |= c->tags;
 	for (i = 0; i < NUMTAGS; i++) {
-		if (selmon->tagset[selmon->seltags] & 1 << i) {
-					if (selmon->tagmap[i] != 0) {
-				XFreePixmap(dpy, selmon->tagmap[i]);
-				selmon->tagmap[i] = 0;
+		if (m->tagset[m->seltags] & 1 << i) {
+			if (m->tagmap[i] != 0) {
+				XFreePixmap(dpy, m->tagmap[i]);
+				m->tagmap[i] = 0;
 			}
 			if (occ & 1 << i) {
 				image = imlib_create_image(sw, sh);
@@ -48,14 +50,14 @@ tagpreviewswitchtag(void)
 				imlib_context_set_visual(DefaultVisual(dpy, screen));
 				#endif // BAR_ALPHA_PATCH
 				imlib_context_set_drawable(root);
-				imlib_copy_drawable_to_image(0, selmon->mx, selmon->my, selmon->mw ,selmon->mh, 0, 0, 1);
+				imlib_copy_drawable_to_image(0, m->mx, m->my, m->mw, m->mh, 0, 0, 1);
 				#if BAR_ALPHA_PATCH
-				selmon->tagmap[i] = XCreatePixmap(dpy, selmon->tagwin, selmon->mw / scalepreview, selmon->mh / scalepreview, depth);
+				m->tagmap[i] = XCreatePixmap(dpy, m->tagwin, m->mw / scalepreview, m->mh / scalepreview, depth);
 				#else
-				selmon->tagmap[i] = XCreatePixmap(dpy, selmon->tagwin, selmon->mw / scalepreview, selmon->mh / scalepreview, DefaultDepth(dpy, screen));
+				m->tagmap[i] = XCreatePixmap(dpy, m->tagwin, m->mw / scalepreview, m->mh / scalepreview, DefaultDepth(dpy, screen));
 				#endif // BAR_ALPHA_PATCH
-				imlib_context_set_drawable(selmon->tagmap[i]);
-				imlib_render_image_part_on_drawable_at_size(0, 0, selmon->mw, selmon->mh, 0, 0, selmon->mw / scalepreview, selmon->mh / scalepreview);
+				imlib_context_set_drawable(m->tagmap[i]);
+				imlib_render_image_part_on_drawable_at_size(0, 0, m->mw, m->mh, 0, 0, m->mw / scalepreview, m->mh / scalepreview);
 				imlib_free_image();
 			}
 		}

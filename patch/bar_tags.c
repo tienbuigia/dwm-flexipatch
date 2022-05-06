@@ -109,20 +109,20 @@ hover_tags(Bar *bar, BarArg *a, XMotionEvent *ev)
 	#if BAR_HIDEVACANTTAGS_PATCH
 	Client *c;
 	unsigned int occ = 0;
-	for (c = bar->mon->clients; c; c = c->next)
+	for (c = m->clients; c; c = c->next)
 		occ |= c->tags == 255 ? 0 : c->tags;
 	#endif // BAR_HIDEVACANTTAGS_PATCH
 
 	do {
 		#if BAR_HIDEVACANTTAGS_PATCH
-		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
+		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
-		x += TEXTW(tagicon(bar->mon, i));
+		x += TEXTW(tagicon(m, i));
 	} while (a->x >= x && ++i < NUMTAGS);
 
 	if (i < NUMTAGS) {
-		if ((i + 1) != selmon->previewshow && !(selmon->tagset[selmon->seltags] & 1 << i)) {
+		if ((i + 1) != m->previewshow && !(m->tagset[m->seltags] & 1 << i)) {
 			if (bar->by > m->my + m->mh / 2) // bottom bar
 				py = bar->by - m->mh / scalepreview - oh;
 			else // top bar
@@ -132,13 +132,13 @@ hover_tags(Bar *bar, BarArg *a, XMotionEvent *ev)
 				px = m->wx + m->ww - m->mw / scalepreview - ov;
 			else if (px < bar->bx)
 				px = m->wx + ov;
-			selmon->previewshow = i + 1;
+			m->previewshow = i + 1;
 			showtagpreview(i, px, py);
-		} else if (selmon->tagset[selmon->seltags] & 1 << i) {
-			hidetagpreview(selmon);
+		} else if (m->tagset[m->seltags] & 1 << i) {
+			hidetagpreview(m);
 		}
-	} else if (selmon->previewshow != 0) {
-		hidetagpreview(selmon);
+	} else if (m->previewshow != 0) {
+		hidetagpreview(m);
 	}
 	#endif // BAR_TAGPREVIEW_PATCH
 
