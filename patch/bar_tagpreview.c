@@ -69,8 +69,11 @@ tagpreviewswitchtag(void)
 void
 createpreview(Monitor *m)
 {
-	if (m->tagwin)
-		return;
+	if (m->tagwin) {
+		XUnmapWindow(dpy, m->tagwin);
+		XDestroyWindow(dpy, m->tagwin);
+		m->tagwin = 0;
+	}
 
 	XSetWindowAttributes wa = {
 		.override_redirect = True,
