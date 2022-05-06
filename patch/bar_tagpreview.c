@@ -40,6 +40,8 @@ tagpreviewswitchtag(void)
 			}
 			if (occ & 1 << i) {
 				image = imlib_create_image(sw, sh);
+				if (image == NULL)
+					continue;
 				imlib_context_set_image(image);
 				imlib_context_set_display(dpy);
 				#if BAR_ALPHA_PATCH
@@ -65,9 +67,10 @@ tagpreviewswitchtag(void)
 }
 
 void
-updatepreview(void)
+createpreview(Monitor *m)
 {
-	Monitor *m;
+	if (m->tagwin)
+		return;
 
 	XSetWindowAttributes wa = {
 		.override_redirect = True,
@@ -80,18 +83,18 @@ updatepreview(void)
 		#endif // BAR_ALPHA_PATCH
 		.event_mask = ButtonPressMask|ExposureMask
 	};
-	for (m = mons; m; m = m->next) {
-		m->tagwin = XCreateWindow(dpy, root, m->wx, m->bar->by + bh, m->mw / 4, m->mh / 4, 0,
-				#if BAR_ALPHA_PATCH
-				depth, CopyFromParent, visual,
-				CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa
-				#else
-				DefaultDepth(dpy, screen), CopyFromParent, DefaultVisual(dpy, screen),
-				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa
-				#endif // BAR_ALPHA_PATCH
-				);
-		XDefineCursor(dpy, m->tagwin, cursor[CurNormal]->cursor);
-		XMapRaised(dpy, m->tagwin);
-		XUnmapWindow(dpy, m->tagwin);
-	}
+	XClassHint ch = {"preview", "preview"};
+
+	m->tagwin = XCreateWindow(dpy, root, m->wx, m->my, m->mw / scalepreview, m->mh / scalepreview, 0,
+			#if BAR_ALPHA_PATCH
+			depth, CopyFromParent, visual,
+			CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa
+			#else
+			DefaultDepth(dpy, screen), CopyFromParent, DefaultVisual(dpy, screen),
+			CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa
+			#endif // BAR_ALPHA_PATCH
+			);
+	XMapRaised(dpy,m->tagwin);
+	XUnmapWindow(dpy, m->tagwin);
+	XSetClassHint(dpy, m->tagwin, &ch);
 }

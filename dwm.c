@@ -3682,9 +3682,6 @@ setup(void)
 
 	updatebars();
 	updatestatus();
-	#if BAR_TAGPREVIEW_PATCH
-	updatepreview();
-	#endif // BAR_TAGPREVIEW_PATCH
 
 	/* supporting window for NetWMCheck */
 	wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
@@ -4539,6 +4536,9 @@ updategeom(void)
 				m->mw = m->ww = unique[i].width;
 				m->mh = m->wh = unique[i].height;
 				updatebarpos(m);
+				#if BAR_TAGPREVIEW_PATCH
+				createpreview(m);
+				#endif // BAR_TAGPREVIEW_PATCH
 			}
 		/* removed monitors if n > nn */
 		for (i = nn; i < n; i++) {
@@ -4566,6 +4566,9 @@ updategeom(void)
 			mons->mw = mons->ww = sw;
 			mons->mh = mons->wh = sh;
 			updatebarpos(mons);
+			#if BAR_TAGPREVIEW_PATCH
+			createpreview(mons);
+			#endif // BAR_TAGPREVIEW_PATCH
 		}
 	}
 	if (dirty) {
