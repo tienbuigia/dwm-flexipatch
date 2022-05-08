@@ -9,7 +9,7 @@ showtagpreview(int tag, int x, int y)
 		XCopyArea(dpy, m->tagmap[tag], m->tagwin, drw->gc, 0, 0, m->mw / scalepreview, m->mh / scalepreview, 0, 0);
 		XMoveWindow(dpy, m->tagwin, x, y);
 		XSync(dpy, False);
-		XMapWindow(dpy, m->tagwin);
+		XMapRaised(dpy, m->tagwin);
 	} else
 		XUnmapWindow(dpy, m->tagwin);
 }
