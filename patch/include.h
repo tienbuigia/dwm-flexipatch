@@ -1,6 +1,7 @@
 /* Bar functionality */
 #include "bar_indicators.h"
 #include "bar_tagicons.h"
+#include "bar.h"
 
 #if BAR_ALPHA_PATCH
 #include "bar_alpha.h"
@@ -58,6 +59,9 @@
 #endif
 #if BAR_TAGLABELS_PATCH
 #include "bar_taglabels.h"
+#endif
+#if BAR_TAGPREVIEW_PATCH
+#include "bar_tagpreview.h"
 #endif
 #if BAR_TAGGRID_PATCH
 #include "bar_taggrid.h"
@@ -233,6 +237,21 @@
 #endif
 #if SETBORDERPX_PATCH
 #include "setborderpx.h"
+#endif
+#if SHIFTBOTH_PATCH || SHIFTSWAPTAGS_PATCH || SHIFTTAG_PATCH || SHIFTTAGCLIENTS_PATCH || SHIFTVIEW_PATCH || SHIFTVIEW_CLIENTS_PATCH
+#include "shift.h"
+#endif
+#if SHIFTBOTH_PATCH
+#include "shiftboth.h"
+#endif
+#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+#include "shiftswaptags.h"
+#endif
+#if SHIFTTAG_PATCH
+#include "shifttag.h"
+#endif
+#if SHIFTTAGCLIENTS_PATCH
+#include "shifttagclients.h"
 #endif
 #if SHIFTVIEW_PATCH
 #include "shiftview.h"

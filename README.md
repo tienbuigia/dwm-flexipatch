@@ -20,6 +20,11 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+
+2022-07-05 - Added the tagpreview patch
+
+2022-07-04 - Added the shift-tools patch(es) with individual toggles
+
 2022-06-20 - Added the renamed scratchpads patch
 
 2022-06-17 - Ported the seamless restart feature from dusk into dwm-flexipatch
@@ -622,6 +627,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [setborderpx](https://dwm.suckless.org/patches/setborderpx/)
       - this patch allows border pixels to be changed during runtime
 
+   - [shift-tools](https://dwm.suckless.org/patches/shift-tools/)
+      - a group of functions that shift clients or views left or right
+
    - [shiftview](https://github.com/chau-bao-long/dotfiles/blob/master/suckless/dwm/shiftview.diff)
       - adds keybindings for left and right circular shift through tags
       - also see focusadjacenttag
@@ -731,6 +739,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [tagothermonitor](https://dwm.suckless.org/patches/tagothermonitor/)
       - adds functions and keybindings to tag a window to a desired tag on an adjacent monitor
+
+   - [tagpreview](https://dwm.suckless.org/patches/tag-previews/)
+      - shows a preview of a tag when hovering the tag icon using the mouse
 
    - [tagswapmon](https://github.com/bakkeby/patches/wiki/tagswapmon/)
       - swap all visible windows on one monitor with those of an adjacent monitor

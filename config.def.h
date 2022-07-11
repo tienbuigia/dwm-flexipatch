@@ -11,6 +11,9 @@ static const unsigned int snap           = 32;  /* snap pixel */
 #if SWALLOW_PATCH
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 #endif // SWALLOW_PATCH
+#if BAR_TAGPREVIEW_PATCH
+static const int scalepreview            = 4;        /* Tag preview scaling */
+#endif // BAR_TAGPREVIEW_PATCH
 #if NO_MOD_BUTTONS_PATCH
 static int nomodbuttons                  = 1;   /* allow client mouse button bindings that have no modifier */
 #endif // NO_MOD_BUTTONS_PATCH
@@ -504,80 +507,80 @@ static const Inset default_inset = {
  *    name - does nothing, intended for visual clue and for logging / debugging
  */
 static const BarRule barrules[] = {
-	/* monitor   bar    alignment         widthfunc                drawfunc                clickfunc                name */
+	/* monitor   bar    alignment         widthfunc                 drawfunc                clickfunc                hoverfunc                name */
 	#if BAR_STATUSBUTTON_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_stbutton,          draw_stbutton,          click_stbutton,          "statusbutton" },
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_stbutton,           draw_stbutton,          click_stbutton,          NULL,                    "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
 	#if BAR_POWERLINE_TAGS_PATCH
-	{  0,        0,     BAR_ALIGN_LEFT,   width_pwrl_tags,         draw_pwrl_tags,         click_pwrl_tags,         "powerline_tags" },
+	{  0,        0,     BAR_ALIGN_LEFT,   width_pwrl_tags,          draw_pwrl_tags,         click_pwrl_tags,         NULL,                    "powerline_tags" },
 	#endif // BAR_POWERLINE_TAGS_PATCH
 	#if BAR_TAGS_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_tags,               draw_tags,              click_tags,              hover_tags,              "tags" },
 	#endif // BAR_TAGS_PATCH
 	#if BAR_TAGLABELS_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_taglabels,         draw_taglabels,         click_taglabels,         "taglabels" },
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_taglabels,          draw_taglabels,         click_taglabels,         NULL,                    "taglabels" },
 	#endif // BAR_TAGLABELS_PATCH
 	#if BAR_TAGGRID_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_taggrid,           draw_taggrid,           click_taggrid,           "taggrid" },
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_taggrid,            draw_taggrid,           click_taggrid,           NULL,                    "taggrid" },
 	#endif // BAR_TAGGRID_PATCH
 	#if BAR_SYSTRAY_PATCH
-	{  0,        0,     BAR_ALIGN_RIGHT,  width_systray,           draw_systray,           click_systray,           "systray" },
+	{  0,        0,     BAR_ALIGN_RIGHT,  width_systray,            draw_systray,           click_systray,           NULL,                    "systray" },
 	#endif // BAR_SYSTRAY_PATCH
 	#if BAR_LTSYMBOL_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_ltsymbol,           draw_ltsymbol,          click_ltsymbol,          NULL,                    "layout" },
 	#endif // BAR_LTSYMBOL_PATCH
 	#if BAR_STATUSCOLORS_PATCH && BAR_STATUSCMD_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_statuscolors,      draw_statuscolors,      click_statuscmd,         "statuscolors" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_statuscolors,       draw_statuscolors,      click_statuscmd,         NULL,                    "statuscolors" },
 	#elif BAR_STATUSCOLORS_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_statuscolors,      draw_statuscolors,      click_statuscolors,      "statuscolors" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_statuscolors,       draw_statuscolors,      click_statuscolors,      NULL,                    "statuscolors" },
 	#elif BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status2d,          draw_status2d,          click_statuscmd,         "status2d" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status2d,           draw_status2d,          click_statuscmd,         NULL,                    "status2d" },
 	#elif BAR_STATUS2D_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status2d,          draw_status2d,          click_status2d,          "status2d" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status2d,           draw_status2d,          click_status2d,          NULL,                    "status2d" },
 	#elif BAR_POWERLINE_STATUS_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_pwrl_status,       draw_pwrl_status,       click_pwrl_status,       "powerline_status" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_pwrl_status,        draw_pwrl_status,       click_pwrl_status,       NULL,                    "powerline_status" },
 	#elif BAR_STATUS_PATCH && BAR_STATUSCMD_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status,             draw_status,            click_statuscmd,         NULL,                    "status" },
 	#elif BAR_STATUS_PATCH
-	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_status,            "status" },
+	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_status,             draw_status,            click_status,            NULL,                    "status" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 	#if XKB_PATCH
-	{  0,        0,     BAR_ALIGN_RIGHT,  width_xkb,               draw_xkb,               click_xkb,               "xkb" },
+	{  0,        0,     BAR_ALIGN_RIGHT,  width_xkb,                draw_xkb,               click_xkb,               NULL,                    "xkb" },
 	#endif // XKB_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
-	{ -1,        0,     BAR_ALIGN_NONE,   width_flexwintitle,      draw_flexwintitle,      click_flexwintitle,      "flexwintitle" },
+	{ -1,        0,     BAR_ALIGN_NONE,   width_flexwintitle,       draw_flexwintitle,      click_flexwintitle,      NULL,                    "flexwintitle" },
 	#elif BAR_TABGROUPS_PATCH
-	{ -1,        0,     BAR_ALIGN_NONE,   width_bartabgroups,      draw_bartabgroups,      click_bartabgroups,      "bartabgroups" },
+	{ -1,        0,     BAR_ALIGN_NONE,   width_bartabgroups,       draw_bartabgroups,      click_bartabgroups,      NULL,                    "bartabgroups" },
 	#elif BAR_AWESOMEBAR_PATCH
-	{ -1,        0,     BAR_ALIGN_NONE,   width_awesomebar,        draw_awesomebar,        click_awesomebar,        "awesomebar" },
+	{ -1,        0,     BAR_ALIGN_NONE,   width_awesomebar,         draw_awesomebar,        click_awesomebar,        NULL,                    "awesomebar" },
 	#elif BAR_FANCYBAR_PATCH
-	{ -1,        0,     BAR_ALIGN_NONE,   width_fancybar,          draw_fancybar,          click_fancybar,          "fancybar" },
+	{ -1,        0,     BAR_ALIGN_NONE,   width_fancybar,           draw_fancybar,          click_fancybar,          NULL,                    "fancybar" },
 	#elif BAR_WINTITLE_PATCH
-	{ -1,        0,     BAR_ALIGN_NONE,   width_wintitle,          draw_wintitle,          click_wintitle,          "wintitle" },
+	{ -1,        0,     BAR_ALIGN_NONE,   width_wintitle,           draw_wintitle,          click_wintitle,          NULL,                    "wintitle" },
 	#endif // BAR_TABGROUPS_PATCH | BAR_AWESOMEBAR_PATCH | BAR_FANCYBAR_PATCH | BAR_WINTITLE_PATCH
 	#if BAR_EXTRASTATUS_PATCH
 	#if BAR_STATUSCOLORS_PATCH && BAR_STATUSCMD_PATCH
-	{ statusmon, 1,     BAR_ALIGN_CENTER, width_statuscolors_es,   draw_statuscolors_es,   click_statuscmd_es,      "statuscolors_es" },
+	{ statusmon, 1,     BAR_ALIGN_CENTER, width_statuscolors_es,    draw_statuscolors_es,   click_statuscmd_es,      NULL,                    "statuscolors_es" },
 	#elif BAR_STATUSCOLORS_PATCH
-	{ statusmon, 1,     BAR_ALIGN_CENTER, width_statuscolors_es,   draw_statuscolors_es,   click_statuscolors,      "statuscolors_es" },
+	{ statusmon, 1,     BAR_ALIGN_CENTER, width_statuscolors_es,    draw_statuscolors_es,   click_statuscolors,      NULL,                    "statuscolors_es" },
 	#elif BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status2d_es,       draw_status2d_es,       click_statuscmd_es,      "status2d_es" },
+	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status2d_es,        draw_status2d_es,       click_statuscmd_es,      NULL,                    "status2d_es" },
 	#elif BAR_STATUS2D_PATCH
-	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status2d_es,       draw_status2d_es,       click_status2d,          "status2d_es" },
+	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status2d_es,        draw_status2d_es,       click_status2d,          NULL,                    "status2d_es" },
 	#elif BAR_POWERLINE_STATUS_PATCH
-	{ statusmon, 1,     BAR_ALIGN_RIGHT,  width_pwrl_status_es,    draw_pwrl_status_es,    click_pwrl_status,       "powerline_status" },
+	{ statusmon, 1,     BAR_ALIGN_RIGHT,  width_pwrl_status_es,     draw_pwrl_status_es,    click_pwrl_status,       NULL,                    "powerline_status" },
 	#elif BAR_STATUSCMD_PATCH && BAR_STATUS_PATCH
-	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status_es,         draw_status_es,         click_statuscmd_es,      "status_es" },
+	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status_es,          draw_status_es,         click_statuscmd_es,      NULL,                    "status_es" },
 	#elif BAR_STATUS_PATCH
-	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status_es,         draw_status_es,         click_status,            "status_es" },
+	{ statusmon, 1,     BAR_ALIGN_CENTER, width_status_es,          draw_status_es,         click_status,            NULL,                    "status_es" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 	#endif // BAR_EXTRASTATUS_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
 	#if BAR_WINTITLE_HIDDEN_PATCH
-	{ -1,        1,  BAR_ALIGN_RIGHT_RIGHT, width_wintitle_hidden, draw_wintitle_hidden,   click_wintitle_hidden,   "wintitle_hidden" },
+	{ -1,        1,  BAR_ALIGN_RIGHT_RIGHT, width_wintitle_hidden,  draw_wintitle_hidden,   click_wintitle_hidden,   NULL,                    "wintitle_hidden" },
 	#endif
 	#if BAR_WINTITLE_FLOATING_PATCH
-	{ -1,        1,     BAR_ALIGN_LEFT,   width_wintitle_floating, draw_wintitle_floating, click_wintitle_floating, "wintitle_floating" },
+	{ -1,        1,     BAR_ALIGN_LEFT,   width_wintitle_floating,  draw_wintitle_floating, click_wintitle_floating, NULL,                    "wintitle_floating" },
 	#endif // BAR_WINTITLE_FLOATING_PATCH
 	#endif // BAR_FLEXWINTITLE_PATCH
 };
@@ -979,14 +982,30 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	#endif // VANITYGAPS_PATCH
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	#if SHIFTTAG_PATCH
+	{ MODKEY|ShiftMask,             XK_Left,       shifttag,               { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagtoleft
+	{ MODKEY|ShiftMask,             XK_Right,      shifttag,               { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagtoright
+	#endif // SHIFTTAG_PATCH
+	#if SHIFTTAGCLIENTS_PATCH
+	{ MODKEY|ShiftMask|ControlMask, XK_Left,       shifttagclients,        { .i = -1 } },
+	{ MODKEY|ShiftMask|ControlMask, XK_Right,      shifttagclients,        { .i = +1 } },
+	#endif // SHIFTTAGCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
 	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
 	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
-  	#endif // SHIFTVIEW_PATCH
-  	#if SHIFTVIEW_CLIENTS_PATCH
+	#endif // SHIFTVIEW_PATCH
+	#if SHIFTVIEW_CLIENTS_PATCH
 	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
-  	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#if SHIFTBOTH_PATCH
+	{ MODKEY|ControlMask,           XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft
+	{ MODKEY|ControlMask,           XK_Right,      shiftboth,              { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoright
+	#endif // SHIFTBOTH_PATCH
+	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_Left,       shiftswaptags,          { .i = -1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_Right,      shiftswaptags,          { .i = +1 } },
+	#endif // SHIFTSWAPTAGS_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH
@@ -1085,8 +1104,8 @@ static Key keys[] = {
 	#if FOCUSADJACENTTAG_PATCH
 	{ MODKEY,                       XK_Left,       viewtoleft,             {0} }, // note keybinding conflict with focusdir
 	{ MODKEY,                       XK_Right,      viewtoright,            {0} }, // note keybinding conflict with focusdir
-	{ MODKEY|ShiftMask,             XK_Left,       tagtoleft,              {0} },
-	{ MODKEY|ShiftMask,             XK_Right,      tagtoright,             {0} },
+	{ MODKEY|ShiftMask,             XK_Left,       tagtoleft,              {0} }, // note keybinding conflict with shifttag
+	{ MODKEY|ShiftMask,             XK_Right,      tagtoright,             {0} }, // note keybinding conflict with shifttag
 	{ MODKEY|ControlMask,           XK_Left,       tagandviewtoleft,       {0} },
 	{ MODKEY|ControlMask,           XK_Right,      tagandviewtoright,      {0} },
 	#endif // FOCUSADJACENTTAG_PATCH
@@ -1421,12 +1440,24 @@ static Signal signals[] = {
 	{ "viewall",                 viewallex },
 	{ "viewex",                  viewex },
 	{ "toggleview",              toggleview },
+	#if SHIFTBOTH_PATCH
+	{ "shiftboth",               shiftboth },
+	#endif // SHIFTBOTH_PATCH
+	#if SHIFTTAG_PATCH
+	{ "shifttag",                shifttag },
+	#endif // SHIFTTAG_PATCH
+	#if SHIFTTAGCLIENTS_PATCH
+	{ "shifttagclients",         shifttagclients },
+	#endif // SHIFTTAGCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
 	{ "shiftview",               shiftview },
 	#endif // SHIFTVIEW_PATCH
 	#if SHIFTVIEW_CLIENTS_PATCH
 	{ "shiftviewclients",        shiftviewclients },
 	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+	{ "shiftswaptags",           shiftswaptags },
+	#endif // SHIFTSWAPTAGS_PATCH
 	#if SELFRESTART_PATCH
 	{ "self_restart",            self_restart },
 	#endif // SELFRESTART_PATCH
@@ -1609,12 +1640,24 @@ static IPCCommand ipccommands[] = {
 	#if SETBORDERPX_PATCH
 	IPCCOMMAND( setborderpx, 1, {ARG_TYPE_SINT} ),
 	#endif // SETBORDERPX_PATCH
+	#if SHIFTBOTH_PATCH
+	IPCCOMMAND( shiftboth, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTBOTH_PATCH
+	#if SHIFTTAG_PATCH
+	IPCCOMMAND( shifttag, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTTAG_PATCH
+	#if SHIFTTAGCLIENTS_PATCH
+	IPCCOMMAND( shifttagclients, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTVIEWCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
 	IPCCOMMAND( shiftview, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEW_PATCH
 	#if SHIFTVIEW_CLIENTS_PATCH
 	IPCCOMMAND( shiftviewclients, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+	IPCCOMMAND( shiftswaptags, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTSWAPTAGS_PATCH
 	#if STACKER_PATCH
 	IPCCOMMAND( pushstack, 1, {ARG_TYPE_SINT} ),
 	#endif // STACKER_PATCH
@@ -1669,4 +1712,3 @@ static IPCCommand ipccommands[] = {
 	#endif // XRDB_PATCH
 };
 #endif // IPC_PATCH
-
