@@ -115,6 +115,23 @@
  */
 #define BAR_TAGGRID_PATCH 0
 
+/* Hover tag icons to see a preview of the windows on that tag.
+ *
+ * The patch depends on Imlib2 for icon scaling.
+ * You need to uncomment the corresponding line in config.mk to use the -lImlib2 library
+ *
+ * Arch Linux:
+ *     sudo pacman -S imlib2
+ * Debian:
+ *     sudo apt install libimlib2-dev
+ *
+ * As with the winicon patch you may want to consider adding the compiler flags of -O3 and
+ * -march=native to enable auto loop vectorize for better performance.
+ *
+ * https://dwm.suckless.org/patches/tag-previews/
+ */
+#define BAR_TAGPREVIEW_PATCH 0
+
 /* Show status in bar */
 #define BAR_STATUS_PATCH 1
 
@@ -967,6 +984,30 @@
  * https://dwm.suckless.org/patches/setborderpx/
  */
 #define SETBORDERPX_PATCH 0
+
+/* Combines shifttag and shiftview. Basically moves the window to the next/prev tag and follows it.
+ * Also see the focusadjacenttag patch.
+ * https://dwm.suckless.org/patches/shift-tools/
+ */
+#define SHIFTBOTH_PATCH 0
+
+/* Swaps all the clients on the current tag with all the client on the next/prev tag.
+ * Depends on the swaptags patch.
+ * https://dwm.suckless.org/patches/shift-tools/
+ */
+#define SHIFTSWAPTAGS_PATCH 0
+
+/* Moves the current selected client to the adjacent tag.
+ * Also see the focusadjacenttag patch.
+ * https://dwm.suckless.org/patches/shift-tools/
+ */
+#define SHIFTTAG_PATCH 0
+
+/* Moves the current selected client to the adjacent tag that has at least one client, if none
+ * then it acts as shifttag.
+ * https://dwm.suckless.org/patches/shift-tools/
+ */
+#define SHIFTTAGCLIENTS_PATCH 0
 
 /* This patch adds keybindings for left and right circular shift through tags.
  * https://github.com/chau-bao-long/dotfiles/blob/master/suckless/dwm/shiftview.diff
